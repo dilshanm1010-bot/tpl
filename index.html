@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THETTAMALA PREMIER LEAGUE 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+* { box-sizing: border-box; margin:0; padding:0; font-family: 'Roboto', sans-serif; }
+body { background: #f8f9fa; color: #333; line-height: 1.5; }
+a { text-decoration: none; }
+button { cursor: pointer; transition: 0.3s; }
+
+/* ---------- Login ---------- */
+#loginPage {
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:#f8f9fa;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+.login-card {
+    background:#fff;
+    padding:40px 30px;
+    border-radius:12px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
+    text-align:center;
+}
+.login-card h2 { color:#28a745; margin-bottom:20px; }
+.login-card input {
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:14px;
+}
+.login-card button { 
+    width:100%; 
+    background:#28a745; 
+    border:none; 
+    color:#fff; 
+    padding:12px; 
+    border-radius:8px; 
+    font-weight:600; 
+    margin-top:10px;
+}
+.login-card button:hover { opacity:0.9; }
+
+/* ---------- Header ---------- */
+header {
+    background: #ffffff;
+    padding: 30px 15px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid #28a745;
+}
+header h1 { font-size: 2.2rem; margin-bottom: 5px; color: #28a745; }
+header p { font-size: 1.1rem; margin-bottom: 10px; color: #555; }
+header .btn { 
+    background: #28a745; 
+    border: none; 
+    padding: 10px 18px; 
+    border-radius: 8px; 
+    color: #fff; 
+    font-weight: 600; 
+    margin: 5px; 
+}
+header .btn.reset { background:#dc3545; }
+header .btn:hover { opacity:0.9; }
+
+nav {
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 12px 0;
+    border-bottom: 2px solid #28a745;
+    position: sticky;
+    top: 110px;
+    z-index: 99;
+}
+nav a {
+    color: #28a745;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #28a745;
+}
+nav a:hover, nav a.active {
+    background: #28a745;
+    color: #fff;
+}
+
+section { padding: 30px 15px; max-width: 1200px; margin: auto; }
+h2 { 
+    color: #28a745; 
+    font-size: 1.8rem; 
+    margin-bottom: 20px; 
+    border-bottom: 2px solid #28a745; 
+    display: inline-block; 
+    padding-bottom:5px; 
+}
+
+.card { background: #fff; padding: 20px; margin-bottom: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.flex-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.flex-row input, .flex-row select, .flex-row button { flex: 1 1 150px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; }
+.flex-row input::placeholder { color: #888; }
+.flex-row button { background: #28a745; color: #fff; font-weight: 500; border: none; }
+.flex-row button.delete { background: #dc3545; }
+.flex-row button:hover { opacity: 0.9; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 15px; min-width: 600px; }
+th, td { padding: 12px 8px; text-align: center; font-size: 14px; }
+th { background: #28a745; color: #fff; font-weight: 500; border-radius: 6px; }
+td { background: #f1f3f5; border-bottom: 1px solid #e2e6ea; border-radius: 6px; }
+tr:hover td { background: #e9f5ec; }
+
+img.logo, img.player { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+
+.badge { padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 500; color: #fff; }
+.GK { background: #007bff; }
+.DF { background: #17a2b8; }
+.MF { background: #ffc107; color: #000; }
+.FW { background: #fd7e14; }
+
+.player-card { 
+    background:#fff; 
+    border-radius:12px; 
+    padding:15px; 
+    text-align:center; 
+    margin:10px; 
+    flex:1 1 180px; 
+    box-shadow:0 4px 12px rgba(0,0,0,0.1); 
+}
+.player-card img { width:80px; height:80px; border-radius:50%; margin-bottom:10px; }
+.player-card .name { font-weight:600; margin-bottom:5px; color: #28a745; }
+.player-card .team { font-size:13px; margin-bottom:5px; color:#555; }
+.player-card .stats { display:flex; justify-content:space-around; margin-top:8px; font-size:13px; color:#333; }
+
+@media(max-width:768px){
+    .flex-row input, .flex-row select, .flex-row button { flex: 1 1 100%; }
+    nav { flex-direction: column; gap: 8px; }
+    table { font-size: 12px; }
+    .player-card { flex:1 1 45%; }
+}
+</style>
+</head>
+<body>
+
+<!-- ---------- Login Page ---------- -->
+<div id="loginPage">
+    <div class="login-card">
+        <h2>Admin Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+</div>
+
+<!-- ---------- Main Content ---------- -->
+<div id="mainContent" style="display:none;">
+
+<header>
+<h1>THETTAMALA PREMIER LEAGUE 2026</h1>
+<p>SEASON ONE</p>
+<button class="btn reset" onclick="clearAllData()">Reset Tournament</button>
+<button class="btn" onclick="downloadReport()">Download Report PDF</button>
+</header>
+
+<nav>
+<a href="#teams">Teams</a>
+<a href="#players">Players</a>
+<a href="#fixtures">Fixtures</a>
+<a href="#points">Points</a>
+<a href="#top">Top Scorers</a>
+<a href="#goalkeepers">Goalkeepers</a>
+</nav>
+
+<section id="teams">
+<h2>Teams</h2>
+<div class="card flex-row">
+<input id="teamName" placeholder="Team Name">
+<input type="file" id="teamPhoto" accept="image/*">
+<button onclick="addTeam()">Add Team</button>
+</div>
+<div class="card flex-row">
+<select id="removeTeamSelect"></select>
+<button class="delete" onclick="removeSelectedTeam()">Remove Team</button>
+</div>
+<div class="card">
+<table id="teamTable"></table>
+</div>
+</section>
+
+<section id="players">
+<h2>Players</h2>
+<div class="card flex-row">
+<input id="playerName" placeholder="Player Name">
+<input id="playerTeam" placeholder="Team Name" list="teamList">
+<datalist id="teamList"></datalist>
+<select id="playerRole">
+<option value="GK">Goalkeeper</option>
+<option value="DF">Defender</option>
+<option value="MF">Midfielder</option>
+<option value="FW">Forward</option>
+</select>
+<input type="file" id="playerPhoto" accept="image/*">
+<button onclick="addPlayer()">Add Player</button>
+</div>
+<div class="card flex-row" id="playerCardsContainer"></div>
+</section>
+
+<section id="fixtures">
+<h2>Fixtures & Player Goals</h2>
+<div class="card flex-row">
+<input id="homeTeam" placeholder="Home Team" list="teamList">
+<input id="awayTeam" placeholder="Away Team" list="teamList">
+<button onclick="addFixture()">Add Fixture</button>
+</div>
+<div class="card">
+<button class="btn" style="background:#17a2b8; margin-bottom:15px;" onclick="updateAllResults()">Update All Results</button>
+<table id="fixtureTable"></table>
+</div>
+</section>
+
+<section id="points">
+<h2>Points Table</h2>
+<div class="card">
+<table id="pointsTable"></table>
+</div>
+</section>
+
+<section id="top">
+<h2>Top Scorers</h2>
+<div class="card flex-row" id="topScorersContainer"></div>
+</section>
+
+<section id="goalkeepers">
+<h2>Top Goalkeepers (Clean Sheets)</h2>
+<div class="card flex-row" id="topGKContainer"></div>
+</section>
+
+<script>
+// ---------- Admin Login ----------
+function login(){
+    const user = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
+    if(user === "dilshan" && pass === "dilshan"){
+        document.getElementById("loginPage").style.display="none";
+        document.getElementById("mainContent").style.display="block";
+        renderAll();
+    } else {
+        alert("Invalid username or password!");
+    }
+}
+
+// ---------- Data ----------
+let teams = JSON.parse(localStorage.getItem("teams")) || [];
+let players = JSON.parse(localStorage.getItem("players")) || [];
+let fixtures = JSON.parse(localStorage.getItem("fixtures")) || [];
+
+// ---------- Storage ----------
+function saveData() {
+    localStorage.setItem("teams", JSON.stringify(teams));
+    localStorage.setItem("players", JSON.stringify(players));
+    localStorage.setItem("fixtures", JSON.stringify(fixtures));
+}
+
+// ---------- Utilities ----------
+function toBase64(file, cb){
+    const reader = new FileReader();
+    reader.onload = () => cb(reader.result);
+    reader.readAsDataURL(file);
+}
+function clearAllData(){
+    if(!confirm("Delete ALL tournament data?")) return;
+    localStorage.clear();
+    teams=[]; players=[]; fixtures=[];
+    renderAll();
+}
+
+// ---------- Teams ----------
+function addTeam(){
+    const name=document.getElementById("teamName").value.trim();
+    const file=document.getElementById("teamPhoto").files[0];
+    if(!name||!file)return alert("Enter team & logo");
+    if(teams.some(t=>t.name===name)) return alert("Team exists");
+    toBase64(file,img=>{
+        teams.push({name,img});
+        document.getElementById("teamName").value="";
+        document.getElementById("teamPhoto").value="";
+        saveData(); renderAll();
+    });
+}
+function deleteTeam(name){
+    if(!confirm(`Delete ${name}?`))return;
+    teams=teams.filter(t=>t.name!==name);
+    players=players.filter(p=>p.team!==name);
+    fixtures=fixtures.filter(f=>f.home!==name && f.away!==name);
+    saveData(); renderAll();
+}
+function removeSelectedTeam(){ const sel=document.getElementById("removeTeamSelect").value; if(sel) deleteTeam(sel); }
+
+// ---------- Players ----------
+function addPlayer(){
+    const name=document.getElementById("playerName").value.trim();
+    const team=document.getElementById("playerTeam").value.trim();
+    const role=document.getElementById("playerRole").value;
+    const file=document.getElementById("playerPhoto").files[0];
+    if(!name||!team||!file)return alert("Fill all fields");
+    if(!teams.some(t=>t.name===team))return alert("Team not found");
+    if(players.some(p=>p.name===name))return alert("Player exists");
+    toBase64(file,img=>{
+        players.push({name,team,role,img,goals:0,cleanSheets:0});
+        document.getElementById("playerName").value="";
+        document.getElementById("playerTeam").value="";
+        document.getElementById("playerPhoto").value="";
+        saveData(); renderAll();
+    });
+}
+function deletePlayer(name){ if(!confirm("Delete player?"))return; players=players.filter(p=>p.name!==name); saveData(); renderAll(); }
+
+// ---------- Fixtures ----------
+function addFixture(){
+    const home=document.getElementById("homeTeam").value.trim();
+    const away=document.getElementById("awayTeam").value.trim();
+    if(!home||!away) return alert("Select both teams");
+    if(home===away) return alert("Home and Away cannot be same");
+    fixtures.push({home,away,hg:0,ag:0});
+    document.getElementById("homeTeam").value="";
+    document.getElementById("awayTeam").value="";
+    saveData(); renderAll();
+}
+
+// ---------- Render Fixtures ----------
+function renderFixtures() {
+    const table = document.getElementById("fixtureTable");
+    table.innerHTML = "<tr><th>#</th><th>Match</th><th>Goals</th><th>Action</th></tr>";
+    fixtures.forEach((f,i)=>{
+        const homePlayers = players.filter(p=>p.team===f.home && p.role!=="GK");
+        const awayPlayers = players.filter(p=>p.team===f.away && p.role!=="GK");
+
+        table.innerHTML += `
+        <tr id="fixtureRow${i}">
+            <td>${i+1}</td>
+            <td>${f.home} vs ${f.away}</td>
+            <td>
+                <div>Home Goals: <input type="number" min="0" class="homeGoals" value="${f.hg}" style="width:50px"></div>
+                <div id="homeScorers${i}"></div>
+                <div>Away Goals: <input type="number" min="0" class="awayGoals" value="${f.ag}" style="width:50px"></div>
+                <div id="awayScorers${i}"></div>
+            </td>
+            <td>—</td>
+        </tr>`;
+
+        const homeScorersDiv = document.getElementById(`homeScorers${i}`);
+        for(let g=0; g<f.hg; g++){
+            homeScorersDiv.innerHTML += `<select class="homeScorerSelect">${homePlayers.map(p=>`<option value="${p.name}">${p.name}</option>`).join('')}</select> `;
+        }
+
+        const awayScorersDiv = document.getElementById(`awayScorers${i}`);
+        for(let g=0; g<f.ag; g++){
+            awayScorersDiv.innerHTML += `<select class="awayScorerSelect">${awayPlayers.map(p=>`<option value="${p.name}">${p.name}</option>`).join('')}</select> `;
+        }
+    });
+}
+
+// ---------- Update All Results ----------
+function updateAllResults() {
+    players.forEach(p => { p.goals = 0; if(p.role==="GK") p.cleanSheets = 0; });
+
+    fixtures.forEach((f, i) => {
+        const row = document.getElementById(`fixtureRow${i}`);
+        const hg = Number(row.querySelector(".homeGoals").value) || 0;
+        const ag = Number(row.querySelector(".awayGoals").value) || 0;
+        f.hg = hg;
+        f.ag = ag;
+
+        const homeScorers = [...row.querySelectorAll(".homeScorerSelect")].map(s => s.value);
+        homeScorers.forEach(name => {
+            const player = players.find(p => p.name === name);
+            if(player) player.goals++;
+        });
+
+        const awayScorers = [...row.querySelectorAll(".awayScorerSelect")].map(s => s.value);
+        awayScorers.forEach(name => {
+            const player = players.find(p => p.name === name);
+            if(player) player.goals++;
+        });
+
+        if(ag === 0) players.filter(p => p.team === f.home && p.role === "GK").forEach(gk => gk.cleanSheets++);
+        if(hg === 0) players.filter(p => p.team === f.away && p.role === "GK").forEach(gk => gk.cleanSheets++);
+    });
+
+    saveData();
+    renderAll();
+    alert("All results updated!");
+}
+
+// ---------- Render Helpers ----------
+function renderTeams(){
+    const table=document.getElementById("teamTable");
+    table.innerHTML="<tr><th>#</th><th>Logo</th><th>Team</th><th>Action</th></tr>";
+    teams.forEach((t,i)=>table.innerHTML+=`<tr><td>${i+1}</td><td><img src="${t.img}" class="logo"></td><td>${t.name}</td><td><button class="delete" onclick="deleteTeam('${t.name}')">Delete</button></td></tr>`);
+
+    const select=document.getElementById("removeTeamSelect");
+    select.innerHTML = `<option value="">Select Team</option>`+teams.map(t=>`<option value="${t.name}">${t.name}</option>`).join('');
+    document.getElementById("teamList").innerHTML = teams.map(t=>`<option value="${t.name}"></option>`).join('');
+}
+
+function renderPlayers(){
+    const container=document.getElementById("playerCardsContainer");
+    container.innerHTML="";
+    players.forEach(p=>{
+        container.innerHTML+=`<div class="player-card">
+            <img src="${p.img}"><div class="name">${p.name}</div>
+            <div class="team">${p.team}</div>
+            <div class="stats"><span class="badge ${p.role}">${p.role}</span> <span>Goals: ${p.goals}</span> <button class="delete" onclick="deletePlayer('${p.name}')">Delete</button></div>
+        </div>`;
+    });
+}
+
+function renderPointsTable(){
+    const table=document.getElementById("pointsTable");
+    const pts = {};
+    teams.forEach(t => pts[t.name] = {played:0,w:0,d:0,l:0,gf:0,ga:0,pts:0});
+    fixtures.forEach(f=>{
+        pts[f.home].played++; pts[f.away].played++;
+        pts[f.home].gf+=f.hg; pts[f.home].ga+=f.ag;
+        pts[f.away].gf+=f.ag; pts[f.away].ga+=f.hg;
+        if(f.hg>f.ag){ pts[f.home].w++; pts[f.home].pts+=3; pts[f.away].l++; }
+        else if(f.hg<f.ag){ pts[f.away].w++; pts[f.away].pts+=3; pts[f.home].l++; }
+        else{ pts[f.home].d++; pts[f.away].d++; pts[f.home].pts++; pts[f.away].pts++; }
+    });
+    const sorted = Object.entries(pts).sort((a,b)=>b[1].pts-a[1].pts);
+    table.innerHTML="<tr><th>#</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>Pts</th></tr>";
+    sorted.forEach(([name,s],i)=> table.innerHTML+=`<tr><td>${i+1}</td><td>${name}</td><td>${s.played}</td><td>${s.w}</td><td>${s.d}</td><td>${s.l}</td><td>${s.gf}</td><td>${s.ga}</td><td>${s.pts}</td></tr>`);
+}
+
+function renderTopScorers(){
+    const container=document.getElementById("topScorersContainer");
+    const top=players.filter(p=>p.goals>0).sort((a,b)=>b.goals-a.goals);
+    container.innerHTML="";
+    top.forEach(p=>{
+        container.innerHTML+=`<div class="player-card">
+            <img src="${p.img}"><div class="name">${p.name}</div>
+            <div class="team">${p.team}</div>
+            <div class="stats"><span>Goals: ${p.goals}</span></div>
+        </div>`;
+    });
+}
+
+function renderTopGK(){
+    const container=document.getElementById("topGKContainer");
+    const top=players.filter(p=>p.role==="GK" && p.cleanSheets>0).sort((a,b)=>b.cleanSheets-a.cleanSheets);
+    container.innerHTML="";
+    top.forEach(p=>{
+        container.innerHTML+=`<div class="player-card">
+            <img src="${p.img}"><div class="name">${p.name}</div>
+            <div class="team">${p.team}</div>
+            <div class="stats"><span>Clean Sheets: ${p.cleanSheets}</span></div>
+        </div>`;
+    });
+}
+
+function renderAll(){ renderTeams(); renderPlayers(); renderFixtures(); renderPointsTable(); renderTopScorers(); renderTopGK(); }
+
+// ---------- PDF Report ----------
+function downloadReport(){
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.text("THETTAMALA PREMIER LEAGUE 2026",10,10);
+    doc.text("Points Table:",10,20);
+    let y=30;
+    const table=document.getElementById("pointsTable");
+    for(let r=0;r<table.rows.length;r++){
+        let row=Array.from(table.rows[r].cells).map(c=>c.innerText).join(" | ");
+        doc.text(row,10,y); y+=7;
+    }
+    doc.save("TPL2026_Report.pdf");
+}
+
+</script>
+</div>
+</body>
+</html>
